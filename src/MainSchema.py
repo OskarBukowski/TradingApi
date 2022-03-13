@@ -1,7 +1,7 @@
 from marshmallow import fields, Schema
 
 class ObResponse:
-    pass
+    def __init__(self, ):
 
 
 class TradesResponse:
