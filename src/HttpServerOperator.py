@@ -12,4 +12,4 @@ app = Flask(__name__)
 
 
 
-@app.route('/exchanges')
+# @app.route('/exchanges')
