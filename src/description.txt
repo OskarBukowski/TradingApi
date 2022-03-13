@@ -1,0 +1,38 @@
+
+default_url: 'http://127.0.0.1:5000'
+
+orderbooks: GET /orderbook
+trades: GET /trades
+
+SPECIFICATION :
+
+A. Orderbooks
+1. exchange: GET /exchange=.........
+2. symbol GET /symbol=.......
+3. lines: GET /lines=......
+4. timestamp range: GET /timestamp_from_to=[1647151384;1647151890]
+
+example request:
+'http://127.0.0.1:5000/orderbook/exchange=zonda/symbol=btc_pln/lines=4/timestamp_from_to=[1647151384;1647151890]'
+
+
+B. Trades
+1. exchange: GET /exchange=.........
+2. symbol GET /symbol=.......
+4. timestamp range: GET /timestamp_from_to=[1647151384;1647151890]
+
+example request:
+'http://127.0.0.1:5000/trades/exchange=zonda/symbol=btc_pln/timestamp_from_to=[1647151384;1647151890]'
+
+C. Exchanges
+1. exchanges: GET /exchanges
+
+example request:
+'http://127.0.0.1:5000/exchanges'
+
+
+D. Exchanges with symbols
+1. all_trading_pairs: GET /trading_pairs
+
+example request:
+'http://127.0.0.1:5000/trading_pairs'
