@@ -3,8 +3,6 @@ import sqlalchemy as db
 from sqlalchemy.sql import select
 
 
-
-
 class DatabaseExecutor:
 
     def __init__(self, query):

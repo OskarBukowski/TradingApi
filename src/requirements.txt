@@ -1,0 +1,4 @@
+sqlalchemy==1.4.32
+marshmallow==3.14.1
+flask==2.0.3
+pytest==7.1.1
