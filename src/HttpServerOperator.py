@@ -9,7 +9,6 @@ from DatabaseConnection import DatabaseExecutor
 app = Flask(__name__)
 
 
-
 ### ENV ACTIVATION ###
 # source env/bin/activate
 
