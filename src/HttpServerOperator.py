@@ -12,7 +12,6 @@ app = Flask(__name__)
 ### ENV ACTIVATION ###
 # source env/bin/activate
 
-
 @app.route('/exchanges', methods=['GET'])
 def get_exchanges():
     query = '''select schema_name from information_schema.schemata
@@ -21,3 +20,6 @@ def get_exchanges():
 
     db = DatabaseExecutor(query)
     return jsonify(exchanges=db.exchanges())
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080, ssl_context='adhoc')
