@@ -12,7 +12,6 @@ app = Flask(__name__)
 ### ENV ACTIVATION ###
 # source env/bin/activate
 
-
 @app.route('/exchanges', methods=['GET'])
 def get_exchanges():
     query = '''select schema_name from information_schema.schemata
