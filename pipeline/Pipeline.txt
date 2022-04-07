@@ -1,0 +1,61 @@
+pipeline{
+
+
+
+    parameters {
+        string(name: 'LOGIN', defaultValue: '', description: 'Write your login')
+        string(name: 'PASSWORD', defaultValue: '', description: 'Write your password')
+        string(name: 'VERSION', defaultvalue: '0.0.1', description: 'Write current version')
+        choice(name: 'HOST', defaultValue: '', description: 'Choose host to run app')
+
+    }
+
+    agent {label '$(HOST}'}
+
+    environment {
+        CREDENTIALS = credentials("test")
+
+    }
+
+    stages {
+        stage("Authorization") {
+            steps {
+
+                sh 'sudo echo ${CREDENTIALS} > /home/cred.txt'
+            }
+
+        }
+
+        stage("Connection") {
+            steps {
+                echo 'Skip'
+
+            }
+
+        }
+
+        stage("Pulling repo") {
+            steps {
+                sh 'sudo su'
+                sh 'cd /opt/TradingApi'
+                sh 'git reset --hard'
+                sh 'git pull'
+
+            }
+
+        }
+
+        stage("Running container") {
+            steps {
+                sh '$CONTAINERS = docker ps | wc -l'
+                sh 'docker build -t "api:${VERSION}" .'
+                sh 'docker run -d "api:${VERSION}'
+            }
+
+        }
+    }
+
+
+
+}
+
