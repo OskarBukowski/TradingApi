@@ -1,0 +1,64 @@
+pipeline{
+
+    parameters {
+        string(name: 'LOGIN', defaultValue: '', description: 'Write your login')
+        string(name: 'PASSWORD', defaultValue: '', description: 'Write your password')
+        string(name: 'VERSION', defaultValue: '0.0.1', description: 'Write current version')
+        choice(name: 'HOST', choices: ['aws-virginia', 'other'], description: 'Choose host to run app')
+
+    }
+
+    agent {label "$HOST"}
+
+    environment {
+        CREDENTIALS = credentials("$LOGIN")
+
+    }
+
+    stages {
+
+        stage("Authorization") {
+            when {
+                equals(actual: "$PASSWORD", expected: "${CREDENTIALS_PSW}")
+            }
+            steps {
+                echo 'Authenticated succesfully'
+            }
+        }
+
+
+        stage("Pulling repo") {
+            steps {
+
+                sh '''
+                sudo su &&
+                cd /opt/TradingApi &&
+                git reset --hard &&
+                git pull'''
+
+                /* OR
+                sh './opt/PipelineTools/TradingApi/pulling_repo.sh' */
+
+
+            }
+
+        }
+
+        stage("Running container") {
+            steps {
+                sh '''
+                sudo su &&
+                cd /opt/TradingApi/src &&
+                docker build -t "api:${VERSION}" .
+                docker run -d "api:${VERSION}" '''
+
+                /* OR
+                sh './opt/PipelineTools/TradingApi/run_container.sh' */
+            }
+
+        }
+
+    }
+
+}
+
