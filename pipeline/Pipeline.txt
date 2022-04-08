@@ -1,45 +1,44 @@
 pipeline{
 
-
-
     parameters {
         string(name: 'LOGIN', defaultValue: '', description: 'Write your login')
         string(name: 'PASSWORD', defaultValue: '', description: 'Write your password')
-        string(name: 'VERSION', defaultvalue: '0.0.1', description: 'Write current version')
-        choice(name: 'HOST', defaultValue: '', description: 'Choose host to run app')
+        string(name: 'VERSION', defaultValue: '0.0.1', description: 'Write current version')
+        choice(name: 'HOST', choices: ['aws-virginia', 'other'], description: 'Choose host to run app')
 
     }
 
-    agent {label '$(HOST}'}
+    agent {label "$HOST"}
 
     environment {
-        CREDENTIALS = credentials("test")
+        CREDENTIALS = credentials("$LOGIN")
 
     }
 
     stages {
+
         stage("Authorization") {
-            steps {
-
-                sh 'sudo echo ${CREDENTIALS} > /home/cred.txt'
+            when {
+                equals(actual: "$PASSWORD", expected: "${CREDENTIALS_PSW}")
             }
-
+            steps {
+                echo 'Authenticated succesfully'
+            }
         }
 
-        stage("Connection") {
-            steps {
-                echo 'Skip'
-
-            }
-
-        }
 
         stage("Pulling repo") {
             steps {
-                sh 'sudo su'
-                sh 'cd /opt/TradingApi'
-                sh 'git reset --hard'
-                sh 'git pull'
+
+                sh '''
+                sudo su &&
+                cd /opt/TradingApi &&
+                git reset --hard &&
+                git pull'''
+
+                /* OR
+                sh './opt/PipelineTools/TradingApi/pulling_repo.sh' */
+
 
             }
 
@@ -47,15 +46,19 @@ pipeline{
 
         stage("Running container") {
             steps {
-                sh '$CONTAINERS = docker ps | wc -l'
-                sh 'docker build -t "api:${VERSION}" .'
-                sh 'docker run -d "api:${VERSION}'
+                sh '''
+                sudo su &&
+                cd /opt/TradingApi/src &&
+                docker build -t "api:${VERSION}" .
+                docker run -d "api:${VERSION}" '''
+
+                /* OR
+                sh './opt/PipelineTools/TradingApi/run_container.sh' */
             }
 
         }
+
     }
-
-
 
 }
 
