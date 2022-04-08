@@ -7,3 +7,5 @@ COPY requirements.txt /home/api/requirements.txt
 RUN pip install -r /home/api/requirements.txt
 
 COPY . /home/api
+
+CMD ["/bin/bash", "/home/api/run.sh"]
