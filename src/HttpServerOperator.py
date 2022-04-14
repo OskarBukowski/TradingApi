@@ -61,7 +61,5 @@ def get_orderbooks_range(exchange, market, ts_from, ts_to):
     return jsonify(db.orderbook())
 
 
-
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, ssl_context='adhoc')
