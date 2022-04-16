@@ -7,7 +7,7 @@ class DatabaseExecutor:
 
     def __init__(self, query):
         self.query = query
-        self.engine = engine = db.create_engine('postgresql://postgres:remiksow@192.168.0.52/postgres')
+        self.engine = engine = db.create_engine('postgresql://postgres:****@****/postgres')
         self.connection = engine.connect()
         self.markets_dict = dict()
 
