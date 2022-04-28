@@ -1,0 +1,70 @@
+pipeline {
+
+    parameters {
+        string(name:'LOGIN', defaultValue: '', description: 'Login here')
+        string(name:'PASSWORD', defaultValue: '', description: 'Login here')
+        string(name:'VERSION', defaultValue: '', description: 'Choose the container version')
+        string(name:'ACCOUNT_ID', defaultValue: '12345678', description: 'Choose the ECR ')
+        string(name:'REPOSITORY', defaultValue: 'hft_repository', description: 'Choose the ECR repository ')
+    }
+
+    agent {label "aws-virginia"}
+
+    environment {
+        CREDENTIALS = credentials("$LOGIN")
+    }
+
+    stages {
+
+        stage("Authorization") {
+            when {
+                equals(actual: "$PASSWORD", expected: "${CREDENTIALS_PSW}")
+            }
+            steps {
+                echo "Starting authorization"
+                script {
+                    if ("$PASSWORD" == "${CREDENTIALS_PSW}") {
+                        echo 'Authorization successful'
+                    }
+
+                    else {
+                        echo 'Password does not match to login, check credentials'
+                    }
+                }
+            }
+        }
+
+        stage("Container pull") {
+            steps {
+                sh '''
+                sudo su &&
+                docker pull $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$VERSION &&
+                docker tag $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY api_container:$VERSION &&
+                docker rmi --force $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$VERSION
+                '''
+            }
+        }
+
+        stage("Run application") {
+            steps {
+                sh '''
+                docker run -d api_container:$VERSION
+                '''
+
+            }
+
+        }
+
+        stage("Post build actions") {
+            steps {
+                echo "..........."
+
+            }
+
+        }
+
+    }
+
+
+
+}
