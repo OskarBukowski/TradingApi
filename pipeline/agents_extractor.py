@@ -3,7 +3,6 @@ import json
 from requests.auth import HTTPBasicAuth
 
 response = requests.get('http://jenkins.local:8000/computer/api/json', auth=HTTPBasicAuth('****', '****'))
-
 r = response.json()
 
 ###
