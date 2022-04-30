@@ -11,6 +11,8 @@ r = response.json()
 
 print([x for x in [r['computer'][i]['assignedLabels'][0]['name'] for i in range(1, len(r['computer']))]])
 
+
+
 ex_response = {'_class': 'hudson.model.ComputerSet',
                'busyExecutors': 0,
                'computer': [{'_class': 'hudson.model.Hudson$MasterComputer',
