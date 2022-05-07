@@ -42,12 +42,31 @@ pipeline {
 
         stage("Container pull") {
             steps {
-                sh '''
-                sudo su &&
-                docker pull $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$VERSION &&
-                docker tag $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY api_container:$VERSION &&
-                docker rmi --force $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$VERSION
-                '''
+                script {
+                    try {
+                        sh '''
+                        sudo su &&
+                        docker pull $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$VERSION &&
+                        docker tag $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY api_container:$VERSION &&
+                        docker rmi --force $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$VERSION
+                        '''
+                    } catch (Exception e) {
+                        echo 'Error occurred while pulling docker image:' + e.toString()
+                        sh '''
+                        sudo su &&
+                        aws ecr get-login-password --region us-east-1 | \
+                        docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY &&
+                        docker pull $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$VERSION &&
+                        docker tag $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY api_container:$VERSION &&
+                        docker rmi --force $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$VERSION
+                        '''
+
+                    }
+
+
+
+                }
+
             }
         }
 
