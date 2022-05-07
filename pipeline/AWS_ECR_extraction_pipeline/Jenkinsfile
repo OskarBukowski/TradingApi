@@ -62,10 +62,7 @@ pipeline {
         }
 
         stage("Post build actions") {
-            steps {
-                echo "..........."
-
-            }
+            steps {}
 
             post {
                 success {
