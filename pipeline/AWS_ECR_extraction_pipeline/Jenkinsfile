@@ -2,7 +2,7 @@ pipeline {
 
     parameters {
         string(name:'LOGIN', defaultValue: '', description: 'Login here')
-        string(name:'PASSWORD', defaultValue: '', description: 'Login here')
+        password(name:'PASSWORD', defaultValue: 'SECRET', description: 'Login here')
         string(name:'VERSION', defaultValue: '', description: 'Choose the container version')
         string(name:'ACCOUNT_ID', defaultValue: '409150791641', description: 'Choose the ECR ')
         string(name:'REPOSITORY', defaultValue: 'hft_repository', description: 'Choose the ECR repository ')
@@ -23,12 +23,18 @@ pipeline {
             steps {
                 echo "Starting authorization"
                 script {
-                    if ("$PASSWORD" == "${CREDENTIALS_PSW}") {
-                        echo 'Authorization successful'
-                    }
+                    try {
+                        if ("$PASSWORD" == "${CREDENTIALS_PSW}") {
+                            echo 'Authorization successful'
+                        }
 
-                    else {
-                        echo 'Password does not match to login, check credentials'
+                        else {
+                            echo 'Wrong password, try again !'
+                        }
+                    } catch (Exception e) {
+                        e.toString()
+                        echo 'Cannot find given credentials, connect with administrator'
+
                     }
                 }
             }
