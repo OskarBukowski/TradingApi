@@ -56,7 +56,7 @@ pipeline {
                         sh '''
                         sudo su &&
                         cd /root &&
-                        aws ecr get-login-password --region us-east-1 | \
+                        aws ecr get-login-password --region us-east-1 &&
                         docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY &&
                         docker pull $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$VERSION &&
                         docker tag $ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY api_container:$VERSION &&
