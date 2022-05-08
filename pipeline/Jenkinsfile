@@ -2,7 +2,7 @@ pipeline{
 
     parameters {
         string(name: 'LOGIN', defaultValue: '', description: 'Write your login')
-        string(name: 'PASSWORD', defaultValue: '', description: 'Write your password')
+        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Write your password')
         string(name: 'VERSION', defaultValue: '0.0.1', description: 'Write current version')
         choice(name: 'HOST', choices: ['aws-virginia', 'other'], description: 'Choose host to run app')
 
