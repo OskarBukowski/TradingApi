@@ -12,7 +12,6 @@ pipeline{
 
     environment {
         CREDENTIALS = credentials("$LOGIN")
-
     }
 
     stages {
