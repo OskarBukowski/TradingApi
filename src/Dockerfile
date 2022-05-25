@@ -1,8 +1,9 @@
 FROM python:3.8-slim-buster
 
+MAINTAINER OskarBukowski
+
 RUN addgroup docker && adduser --no-create-home --disabled-password --ingroup docker docker
 
-USER docker
 
 RUN mkdir -p /home/api
 
@@ -12,4 +13,8 @@ RUN pip install -r /home/api/requirements.txt
 
 COPY . /home/api
 
-CMD ["/bin/bash", "/home/api/run.sh"]
+USER docker
+
+CMD ["echo", "Starting TradingApi script"]
+
+ENTRYPOINT ["/bin/bash", "/home/api/run.sh"]
