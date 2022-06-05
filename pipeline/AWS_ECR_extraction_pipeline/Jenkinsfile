@@ -1,8 +1,8 @@
 pipeline {
 
     parameters {
-        string(name:'LOGIN', defaultValue: '', description: 'Login here')
-        password(name:'PASSWORD', defaultValue: 'SECRET', description: 'Password here')
+        string(name:'LOGIN', defaultValue: 'admin', description: 'Login here')
+        password(name:'PASSWORD', defaultValue: 'password', description: 'Password here')
         string(name:'VERSION', defaultValue: '', description: 'Choose the container version')
         string(name:'ACCOUNT_ID', defaultValue: '409150791641', description: 'Choose the ECR account id')
         string(name:'REPOSITORY', defaultValue: 'hft_repository', description: 'Choose the ECR repository ')
