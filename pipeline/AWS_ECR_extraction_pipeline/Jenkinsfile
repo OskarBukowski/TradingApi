@@ -78,7 +78,6 @@ pipeline {
                 sh '''
                 docker run -d api_container:$VERSION
                 '''
-
             }
         }
 
